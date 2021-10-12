@@ -29,7 +29,7 @@ public class JoinAction implements Action {
 		
 		new UserDao().insert(vo);
 		
-		MvcUtil.redirect("/mysite02/user/a=joinsucess", request, response);
+		MvcUtil.redirect("/mysite02/user?a=joinsuccess", request, response);
 	}
 
 }

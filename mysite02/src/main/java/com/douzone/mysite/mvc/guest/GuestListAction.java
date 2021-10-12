@@ -1,26 +1,20 @@
-package com.douzone.mysite.mvc.user;
+package com.douzone.mysite.mvc.guest;
 
 import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.douzone.web.mvc.Action;
 import com.douzone.web.util.MvcUtil;
 
-public class LogoutAction implements Action {
+public class GuestListAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//로그아웃 처리
-		HttpSession session = request.getSession();
-		session.removeAttribute("AuthUser");
-		session.invalidate(); //설정된 세션의 값들을 모두 삭제
-		
-		MvcUtil.redirect(request.getContextPath(), request, response);
-		
+		MvcUtil.forward("guestbook/list", request, response);
+
 	}
 
 }

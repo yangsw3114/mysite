@@ -29,7 +29,10 @@ public class LoginAction implements Action {
 		
 		//인증처리(세션처리)
 		HttpSession session = request.getSession();
+		//Servlet에서 HttpSession 객체 얻기 위하여 request.getSession() 함수를 이용한다.
 		session.setAttribute("authUser", userVo);
+		//세션 영역에 속성 값을 설정할 때 setAttribute() 함수를 이용한다.
+
 		
 		
 		MvcUtil.redirect("/mysite02", request, response);
