@@ -20,7 +20,7 @@ public class GuestController extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		
 		String actionName = request.getParameter("a");
-
+		
 		ActionFactory af = new GuestActionFactory();
 		Action action = af.getAction(actionName);
 		action.execute(request, response);

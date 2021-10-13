@@ -27,21 +27,6 @@ public class UserController extends HttpServlet {
 		Action action = af.getAction(actionName);
 		action.execute(request, response);
 	}
-//		if("joinform".equals(action)) {
-//		MvcUtil.forward("/WEB-INF/views/user/joinform.jsp", request, response);
-//	}else if("Loginform".equals(action)) {
-//		
-//	}else if("updateform".equals(action)) {
-//		
-//	}else if("Logout".equals(action)) {
-//		
-//	}else if("join".equals(action)) {
-//		
-//	}else {
-//		MvcUtil.redirect(request.getContextPath(), request ,response);
-//	}
-
-
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub

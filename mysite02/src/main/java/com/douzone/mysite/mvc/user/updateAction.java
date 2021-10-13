@@ -12,7 +12,7 @@ import com.douzone.mysite.vo.UserVo;
 import com.douzone.web.mvc.Action;
 import com.douzone.web.util.MvcUtil;
 
-public class updateformAction implements Action {
+public class updateAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -23,14 +23,24 @@ public class updateformAction implements Action {
 			MvcUtil.redirect(request.getContextPath(), request, response);
 			return;
 		}
-		////////////////////////////
-		Long no = authUser.getNo();
-		UserVo userVo = new UserDao().findByNo(no);
 		
-		request.setAttribute("userVo", userVo);
+		String name = request.getParameter("name");
+		String password = request.getParameter("password");
+		String gender = request.getParameter("gender");
+		
+		UserVo vo = new UserVo();
+		vo.setName(name);
+		vo.setPassword(password);
+		vo.setGender(gender);
+		vo.setNo(authUser.getNo());
+		
+		new UserDao().update(vo);
+		authUser.setName(name);
+		
+		MvcUtil.redirect(request.getContextPath() + "/user?a=updatefrom", request, response);
+		//
 		
 		
-		MvcUtil.forward("user/updateform", request, response);
 	}
 
 }

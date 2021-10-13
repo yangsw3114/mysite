@@ -55,6 +55,49 @@ public class UserDao {
 		return result;
 	}
 	
+	public boolean update(UserVo vo) {
+		Connection conn = null;
+		boolean result =false;
+		PreparedStatement pstmt = null;
+		try {
+			
+			conn = getConnection();
+			//3. SQL문 준비
+			String sql ="update user set name=?, password=?, gender=? where no=?";
+			pstmt = conn.prepareStatement(sql);
+			
+			//4. 바인딩(binding)
+			pstmt.setString(1, vo.getName());
+			pstmt.setString(2, vo.getPassword());
+			pstmt.setString(3, vo.getGender());
+			pstmt.setLong(4, vo.getNo());
+			
+			//5. SQL실행
+			int count = pstmt.executeUpdate();
+			
+			result = count == 1;
+
+		}catch(SQLException e) {
+			System.out.println("error_update:" + e);
+		}
+		finally {
+			//clean up
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+
+				if(conn != null) {
+				conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	
 	
 	public UserVo findByEmailAmdPassword(String email, String password) {
 		
@@ -117,6 +160,70 @@ public class UserDao {
 		return vo;
 		
 	}
+	
+	public UserVo findByNo(Long no) {
+		
+		UserVo vo = null;
+		
+		//List<UserVo> result = new ArrayList<UserVo>();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		
+		try {
+			
+			conn = getConnection();
+			
+			//3. SQL문 준비
+			String sql ="select name, email, gender from user where no=?";
+			pstmt = conn.prepareStatement(sql);
+			
+			
+			pstmt.setLong(1, no);
+
+			
+			
+			//5. SQL실행
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				String name = rs.getString(1);
+				String email = rs.getString(2);
+				String gender = rs.getString(3);
+				
+				vo = new UserVo();
+				
+				vo.setName(name);
+				vo.setEmail(email);
+				vo.setGender(gender);
+				
+					
+				//result.add(vo);
+			}
+
+			
+		}catch(SQLException e) {
+			System.out.println("error_select:" + e);
+		}
+		finally {
+			//clean up
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+
+				if(conn != null) {
+				conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return vo;
+		
+	}
 
 
 	
@@ -135,6 +242,9 @@ public class UserDao {
 
 		return conn;
 	}
+
+
+
 	
 	
 }

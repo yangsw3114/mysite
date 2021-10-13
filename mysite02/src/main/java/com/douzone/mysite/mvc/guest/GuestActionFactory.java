@@ -11,10 +11,16 @@ public class GuestActionFactory extends ActionFactory {
 		Action action = null;
 		if("list".equals(actionName)) { //방명록 입장
 			action = new GuestListAction();
-		}else if("joinsuccess".equals(actionName)) { 
-			
+		}else if("insert".equals(actionName)) { 
+			action = new GuestinsertAction();
+		}else if("deleteform".equals(actionName)) { 
+			action = new deleteformAction();
 		}
-		else {
+		else if("delete".equals(actionName)) { 
+			action = new deleteAction();
+		}
+		else 
+		{
 			action = new GuestListAction();
 		}
 		return action;

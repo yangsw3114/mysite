@@ -22,7 +22,9 @@ public class UserActionFactory extends ActionFactory {
 		}else if("Logout".equals(actionName)) { //로그아웃
 			action = new LogoutAction();
 		}else if("updateform".equals(actionName)) { // 회원정보수정
-			//action = new updateformAction();
+			action = new updateformAction();
+		}else if("update".equals(actionName)) { // 회원정보수정
+			action = new updateAction();
 		}
 		
 		else {
