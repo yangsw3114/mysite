@@ -18,8 +18,7 @@ public class GuestListAction implements Action {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
-		GuestbookDao dao = new GuestbookDao();
-		List<GuestbookVo> list = dao.findAll();
+		List<GuestbookVo> list = new GuestbookDao().findAll();
 		
 		request.setAttribute("list", list);
 		

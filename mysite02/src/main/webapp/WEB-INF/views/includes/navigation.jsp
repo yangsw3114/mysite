@@ -4,8 +4,8 @@
 
 		<div id="navigation">
 			<ul>
-				<li><a href="<%=request.getContextPath() %>">양승우</a></li>
-				<li><a href="<%=request.getContextPath() %>/guest?a=list">방명록</a></li>
-				<li><a href="<%=request.getContextPath() %>/board">게시판</a></li>
+				<li><a href="${pageContext.request.contextPath }">양승우</a></li>
+				<li><a href="${pageContext.request.contextPath }/guest?a=list">방명록</a></li>
+				<li><a href="${pageContext.request.contextPath }/board">게시판</a></li>
 			</ul>
 		</div>
