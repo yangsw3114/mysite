@@ -47,7 +47,7 @@ public class WriteaddAction implements Action {
 				vo.setDepth(Integer.parseInt(depth)+1);
 				
 			}else {
-				vo.setOrder_no(1);
+				vo.setOrder_no(0);
 				vo.setDepth(0);
 			}
 			
