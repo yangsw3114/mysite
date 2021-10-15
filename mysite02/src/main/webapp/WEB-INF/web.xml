@@ -66,5 +66,14 @@ xmlns="http://JAVA.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.co
 		<servlet-name>GuestController</servlet-name>
 		<url-pattern>/guest</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>BoardController</servlet-name>
+		<servlet-class>com.douzone.mysite.controller.BoardController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BoardController</servlet-name>
+		<url-pattern>/board</url-pattern>
+	</servlet-mapping>
   
 </web-app>

@@ -1,6 +1,6 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,8 +14,8 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
-					<input type="text" id="kwd" name="kwd" value="">
+				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
+					<input type="text" id="kwd" name="kwd" value="test">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -27,30 +27,25 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>				
-					<tr>
-						<td>3</td>
-						<td style="text-align:left; padding-left:0px"><a href="">세 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-10-11 12:04:20</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td style="text-align:left; padding-left:${20*1 }px"><img src='${pageContext.servletContext.contextPath }/assets/images/reply.png' /><a href="">두 번째 글입니다.</a></td>
-						<td>안대혁</td> 
-						<td>3</td>
-						<td>2015-10-02 12:04:12</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td style="text-align:left; padding-left:${20*2 }px"><img src='${pageContext.servletContext.contextPath }/assets/images/reply.png' /><a href="">첫 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-09-25 07:24:32</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
+					<c:set var='count' value='${fn:length(boardlist) }'/>
+					<c:forEach items='${boardlist }' var='vo' varStatus='status'>
+						<tr>
+							<td>${count-status.index }</td>
+							<td style="text-align:left; padding-left:0px"><a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no }">${vo.title }</a></td>
+							<!-- 댓글에 진입후 대댓글DB에 삽입되는 과정완료후 작성하기 아마 if조건문 쓰면될듯 
+							<td style="text-align:left; padding-left:${20*1 }px"><img src='${pageContext.servletContext.contextPath }/assets/images/reply.png' /><a href="">${vo.title }</a></td>
+							-->
+							<c:forEach items='${userlist }' var='vo2'>
+								<c:if test="${vo.user_no == vo2.no }">
+									<td>${vo2.name }</td>	
+								</c:if>
+							</c:forEach> <!-- DB의 게시판테이블과 유저테이블의 no값을 비교후 조건에 맞는 name값 출력 -->
+														
+							<td>${vo.hit }</td> <!-- 클릭에 동적으로 조회수 증가하게 수정 -->
+							<td>${vo.regdate }</td>
+							<td><a href="" class="del">삭제</a></td>
+						</tr>
+					</c:forEach>
 				</table>
 				
 				<!-- pager 추가 -->
@@ -68,7 +63,7 @@
 				<!-- pager 추가 -->
 				
 				<div class="bottom">
-					<a href="" id="new-book">글쓰기</a>
+					<a href="${pageContext.request.contextPath }/board?a=write" id="new-book">글쓰기</a>
 				</div>				
 			</div>
 		</div>

@@ -8,28 +8,50 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.douzone.mysite.vo.BoardVo;
 
-import com.douzone.mysite.vo.UserVo;
 
-public class UserDao {
+public class BoardDao {
 
-	
-	public boolean insert(UserVo vo) {
+	public boolean insert(BoardVo vo) {
 		Connection conn = null;
 		boolean result =false;
 		PreparedStatement pstmt = null;
+
 		try {
 			
 			conn = getConnection();
-			//3. SQL문 준비
-			String sql =" insert into user values(null, ?, ?, ?, ?,now())";
-			pstmt = conn.prepareStatement(sql);
 			
-			//4. 바인딩(binding)
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getEmail());
-			pstmt.setString(3, vo.getPassword());
-			pstmt.setString(4, vo.getGender());
+			//3. SQL문 준비
+			if(vo.getGroup_no() != 0) { 
+				String sql ="insert into board values(null, ?, ?, 5, now(), ?, ?, ?, ?)";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				//4. 바인딩(binding)
+				pstmt.setString(1, vo.getTitle());
+				pstmt.setString(2, vo.getContents());
+				//pstmt.setInt(, vo.getHit());	//일단 임의로 삽입	
+				pstmt.setInt(3, vo.getGroup_no());
+				pstmt.setInt(4, vo.getOrder_no());
+				pstmt.setInt(5, vo.getDepth());
+				pstmt.setLong(6, vo.getUser_no());
+				 
+				}
+			else {
+				String sql ="insert into board values(null, ?, ?, 5, now(), (select ifnull(max(group_no), 0)+1 from board b), ?, ?, ?)";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				//4. 바인딩(binding)
+				pstmt.setString(1, vo.getTitle());
+				pstmt.setString(2, vo.getContents());
+				//pstmt.setInt(, vo.getHit());	//일단 임의로 삽입	
+				pstmt.setInt(3, vo.getOrder_no());
+				pstmt.setInt(4, vo.getDepth());
+				pstmt.setLong(5, vo.getUser_no());
+ 
+			}
 			
 			//5. SQL실행
 			int count = pstmt.executeUpdate();
@@ -56,7 +78,7 @@ public class UserDao {
 		return result;
 	}
 	
-	public boolean update(UserVo vo) {
+	public boolean order_update(BoardVo vo) {
 		Connection conn = null;
 		boolean result =false;
 		PreparedStatement pstmt = null;
@@ -64,14 +86,16 @@ public class UserDao {
 			
 			conn = getConnection();
 			//3. SQL문 준비
-			String sql ="update user set name=?, password=?, gender=? where no=?";
+				
+			//vo의 그룹넘버와 오더넘버를 가져와서 그것보다 같거나큰오버넘버들 전부다 +1
+			String sql ="update board set order_no=order_no+1 where group_no = ? and order_no in(select * from(select order_no from board where order_no >= ?) t)";
 			pstmt = conn.prepareStatement(sql);
 			
 			//4. 바인딩(binding)
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getPassword());
-			pstmt.setString(3, vo.getGender());
-			pstmt.setLong(4, vo.getNo());
+			pstmt.setInt(1, vo.getGroup_no());
+			pstmt.setInt(2, vo.getOrder_no());
+
+
 			
 			//5. SQL실행
 			int count = pstmt.executeUpdate();
@@ -100,11 +124,9 @@ public class UserDao {
 	
 	
 	
-	public UserVo findByEmailAmdPassword(String email, String password) {
+	public List<BoardVo> findAll() {
 		
-		UserVo vo = null;
-		
-		//List<UserVo> result = new ArrayList<UserVo>();
+		List<BoardVo> result = new ArrayList<BoardVo>();
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -116,145 +138,33 @@ public class UserDao {
 			conn = getConnection();
 			
 			//3. SQL문 준비
-			String sql ="select no, name from user "
-					+ "where email=? and password=?";
-			pstmt = conn.prepareStatement(sql);
-			
-			
-			pstmt.setString(1, email);
-			pstmt.setString(2, password);
-			
-			
-			//5. SQL실행
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				Long no = rs.getLong(1);
-				String name = rs.getString(2);
-				
-				vo = new UserVo();
-				
-				vo.setNo(no);
-				vo.setName(name);
-					
-				//result.add(vo);
-			}
-
-			
-		}catch(SQLException e) {
-			System.out.println("error_select:" + e);
-		}
-		finally {
-			//clean up
-			try {
-				if(pstmt != null) {
-					pstmt.close();
-				}
-
-				if(conn != null) {
-				conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return vo;
-		
-	}
-	
-	public UserVo findByNo(Long no) {
-		
-		UserVo vo = null;
-		
-		//List<UserVo> result = new ArrayList<UserVo>();
-		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		
-		try {
-			
-			conn = getConnection();
-			
-			//3. SQL문 준비
-			String sql ="select name, email, gender from user where no=?";
-			pstmt = conn.prepareStatement(sql);
-			
-			
-			pstmt.setLong(1, no);
-
-			
-			
-			//5. SQL실행
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				String name = rs.getString(1);
-				String email = rs.getString(2);
-				String gender = rs.getString(3);
-				
-				vo = new UserVo();
-				
-				vo.setName(name);
-				vo.setEmail(email);
-				vo.setGender(gender);
-				
-					
-				//result.add(vo);
-			}
-
-			
-		}catch(SQLException e) {
-			System.out.println("error_select:" + e);
-		}
-		finally {
-			//clean up
-			try {
-				if(pstmt != null) {
-					pstmt.close();
-				}
-
-				if(conn != null) {
-				conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return vo;
-		
-	}
-
-
-	public List<UserVo> findAll() {
-		
-		List<UserVo> result = new ArrayList<UserVo>();
-		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		
-		
-		try {
-			
-			conn = getConnection();
-			
-			//3. SQL문 준비
-			String sql ="select * from user;";
+			String sql ="select * from board;";
 			pstmt = conn.prepareStatement(sql);
 						
 			//5. SQL실행
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Long no = rs.getLong(1);
-				String name = rs.getString(2);
+				String title = rs.getString(2);
+				String contents = rs.getString(3);
+				int hit = rs.getInt(4);
+				String regdate = rs.getString(5);
+				int group_no = rs.getInt(6);
+				int order_no = rs.getInt(7);
+				int depth = rs.getInt(8);
+				Long user_no = rs.getLong(9);
 				
-				
-				UserVo vo = new UserVo();
+				BoardVo vo = new BoardVo();
 
 				vo.setNo(no);
-				vo.setName(name);
+				vo.setTitle(title);
+				vo.setContents(contents);
+				vo.setHit(hit);
+				vo.setRegdate(regdate);
+				vo.setGroup_no(group_no);
+				vo.setOrder_no(order_no);
+				vo.setDepth(depth);
+				vo.setUser_no(user_no);
 				
 					
 				result.add(vo);
@@ -281,9 +191,125 @@ public class UserDao {
 		return result;
 		
 	}
+
+
+	public BoardVo findByNo(Long no) {
+		
+		BoardVo vo = null;
+		
+		//List<UserVo> result = new ArrayList<UserVo>();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		
+		try {
+			
+			conn = getConnection();
+			
+			//3. SQL문 준비
+			String sql ="select title, contents, hit, reg_date, group_no, order_no, depth, user_no from board where no =?";
+			pstmt = conn.prepareStatement(sql);
+			
+			
+			pstmt.setLong(1, no);
+
+			
+			
+			//5. SQL실행
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				String title = rs.getString(1);
+				String contents = rs.getString(2);
+				int hit = rs.getInt(3);
+				String reg_date = rs.getString(4);
+				int group_no = rs.getInt(5);
+				int order_no = rs.getInt(6);
+				int depth = rs.getInt(7);
+				Long user_no = rs.getLong(8);
+				
+				
+				vo = new BoardVo();
+				
+				
+				vo.setNo(no);
+				vo.setTitle(title);
+				vo.setContents(contents);
+				vo.setHit(hit);
+				vo.setRegdate(reg_date);
+				vo.setGroup_no(group_no);
+				vo.setOrder_no(order_no);
+				vo.setDepth(depth);
+				vo.setUser_no(user_no);
+				
+			}
+
+			
+		}catch(SQLException e) {
+			System.out.println("error_select:" + e);
+		}
+		finally {
+			//clean up
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+
+				if(conn != null) {
+				conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return vo;
+		
+	}
+
 	
-	
-	
+	public Boolean delete(BoardVo vo) {
+		boolean result = false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			
+			conn=getConnection();
+			
+			//3. SQL 준비
+			String sql = "";
+			pstmt = conn.prepareStatement(sql);
+			
+			//4. binding
+			pstmt.setLong(1, vo.getNo());
+
+			
+			//5. SQL 실행
+			int count = pstmt.executeUpdate();
+			
+			result = count == 1;
+		}catch (SQLException e) {
+			System.out.println("error_delete:" + e);
+		} finally {
+			// clean up
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+	}
+
+		
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		try {
@@ -299,9 +325,6 @@ public class UserDao {
 
 		return conn;
 	}
-
-
-
 	
 	
 }
