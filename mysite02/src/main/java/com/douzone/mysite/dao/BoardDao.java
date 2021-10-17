@@ -88,7 +88,8 @@ public class BoardDao {
 			//3. SQL문 준비
 				
 			//vo의 그룹넘버와 오더넘버를 가져와서 그것보다 같거나큰오버넘버들 전부다 +1
-			String sql ="update board set order_no=order_no+1 where group_no = ? and order_no in(select * from(select order_no from board where order_no >= ?) t)";
+			//String sql ="update board set order_no=order_no+1 where group_no = ? and order_no in(select * from(select order_no from board where order_no >= ?) t)";
+			String sql =  "update board set order_no = order_no+1 where group_no = ? and order_no >= ?";
 			pstmt = conn.prepareStatement(sql);
 			
 			//4. 바인딩(binding)
