@@ -18,12 +18,22 @@ public class ListAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<BoardVo> list = new BoardDao().findAll();
+
+		String no = request.getParameter("pageno");
+
+		if(no == null) {
+			no ="1";
+		}
+		
+		List<BoardVo> list = new BoardDao().findAll(Integer.parseInt(no));	
+		List<BoardVo> list2 = new BoardDao().findAll();
+		
 		List<UserVo> userlist = new UserDao().findAll();
 		
 		request.setAttribute("boardlist", list);
+		request.setAttribute("all_board", list2);
 		request.setAttribute("userlist", userlist);
-		
+		request.setAttribute("pageno", no);
 		
 		MvcUtil.forward("board/list", request, response);
 	}

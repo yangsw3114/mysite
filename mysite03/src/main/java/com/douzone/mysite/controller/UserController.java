@@ -15,7 +15,6 @@ import com.douzone.mysite.vo.UserVo;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-
 	@Autowired
 	private UserService userService;
 	
@@ -30,9 +29,8 @@ public class UserController {
 		return "redirect:/user/joinsuccess";
 	}
 	
-	@RequestMapping(value="/joinsuccess") //get,post메소드 설정안하
+	@RequestMapping("/joinsuccess")
 	public String joinsuccess() {
-
 		return "user/joinsuccess";
 	}
 	
@@ -40,7 +38,7 @@ public class UserController {
 	public String login() {
 		return "user/login";
 	}
-	
+
 	@RequestMapping(value="/logout", method=RequestMethod.GET)
 	public String logout(HttpSession session) {
 		session.removeAttribute("authUser");
@@ -48,58 +46,57 @@ public class UserController {
 		return "redirect:/";
 	}
 	
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String login(
+		HttpSession session,	
+		@RequestParam(value="email", required=true, defaultValue="") String email,
+		@RequestParam(value="password", required=true, defaultValue="") String password,
+		Model model) {
+		
+		UserVo userVo = userService.getUser(email, password);
+		if(userVo == null) {
+			model.addAttribute("result", "fail");
+			return "user/login";
+		}
+		
+		/* 인증 처리 */
+		session.setAttribute("authUser", userVo);
+		
+		return "redirect:/";
+	}
 	
 	@RequestMapping(value="/update", method=RequestMethod.GET)
 	public String update(HttpSession session, Model model) {
+		// 접근제어(Access Control List)
 		//접근제어(Access control List)
 		//접근제어 하는이유: http://localhost:8080/mysite03/user/update URL로 다른 사용자가 접근하는걸 막기 위해서
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
-		///////////////////////////////////////
+		//////////////////////////////////////////////////////////
 		
-		long no = authUser.getNo();
-		UserVo userVo = userService.getUser(no);
+		UserVo userVo = userService.getUser(authUser.getNo());
 		model.addAttribute("userVo", userVo);
 		
-		return "user/update"; 
-	}
-	
-	
+		return "user/update";
+	}	
+
 	@RequestMapping(value="/update", method=RequestMethod.POST)
 	public String update(HttpSession session, UserVo userVo) {
-		//접근제어(Access control List)
-		//접근제어 하는이유: http://localhost:8080/mysite03/user/update URL로 다른 사용자가 접근하는걸 막기 위해서
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
+		// 접근제어(Access Control List)
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
 		}
-		///////////////////////////////////////
+		//////////////////////////////////////////////////////////
 		
 		userVo.setNo(authUser.getNo());
 		userService.updateUser(userVo);
 		
 		authUser.setName(userVo.getName());
 		
-		return "redirect:/user/update"; 
-	}
+		return "redirect:/user/update";
+	}	
 	
-	@RequestMapping(value="/login", method=RequestMethod.POST)
-	public String login(
-			HttpSession session, 
-			@RequestParam(value="email", required=true, defaultValue="") String email,
-			@RequestParam(value="password", required=true, defaultValue="") String password,
-			Model model) {
-		UserVo userVo = userService.getUser(email, password); 
-		if(userVo == null) {
-			model.addAttribute("result","fail");
-			return "user/login";
-		}
-		
-		// 인증 처리
-		session.setAttribute("authUser", userVo);
-		
-		return "redirect:/";
-	}
 }

@@ -171,19 +171,7 @@ public class BoardDao {
 	
 	
 	public List<BoardVo> findAll() {
-		//int first_limit_num
-//		설렉트로 전체 갯수
-//		구하고  limit ? ?  
-		//선택한 페이지 중간에 안가도 되고 선택한 페이지 빨간색으로 표시, 없는 페이지 회색
-		//1~5페이지 표시하고 5페이지에서 화살표 선택시 6~10페이지 출력
-		//한 페이지에는 10개의 게시물 출력
-//
-//		첫번째  second * 페이지넘버
-//		두번째 보여주고싶은 페이지 수
-		
-		//listAction에서 클릭한 페이지 수만큼 나누는 방식
-		//list.jsp 페이징 출력하는ㄴ 부분은 <c:forEach>, <c:choose> 같은 거 사용하면 가능
-		
+
 		List<BoardVo> result = new ArrayList<BoardVo>();
 		
 		Connection conn = null;
@@ -197,9 +185,82 @@ public class BoardDao {
 			
 			//3. SQL문 준비
 			//String sql ="select * from board, user where board.user_no = user.no order by group_no DESC, order_no ASC LIMIT ?, 5";
-			String sql ="select * from board, user where board.user_no = user.no order by group_no DESC, order_no ASC ";
+			String sql ="select * from board, user where board.user_no = user.no order by group_no DESC, order_no ASC";
 			pstmt = conn.prepareStatement(sql);
 						
+
+			
+			//5. SQL실행
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				Long no = rs.getLong(1);
+				String title = rs.getString(2);
+				String contents = rs.getString(3);
+				int hit = rs.getInt(4);
+				String regdate = rs.getString(5);
+				int group_no = rs.getInt(6);
+				int order_no = rs.getInt(7);
+				int depth = rs.getInt(8);
+				Long user_no = rs.getLong(9);
+				
+				BoardVo vo = new BoardVo();
+
+				vo.setNo(no);
+				vo.setTitle(title);
+				vo.setContents(contents);
+				vo.setHit(hit);
+				vo.setRegdate(regdate);
+				vo.setGroup_no(group_no);
+				vo.setOrder_no(order_no);
+				vo.setDepth(depth);
+				vo.setUser_no(user_no);
+				
+					
+				result.add(vo);
+			}
+
+			
+		}catch(SQLException e) {
+			System.out.println("error_select:" + e);
+		}
+		finally {
+			//clean up
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+
+				if(conn != null) {
+				conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+		
+	}
+	
+	
+	public List<BoardVo> findAll(int limit_firstNum) {
+		List<BoardVo> result = new ArrayList<BoardVo>();
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		
+		try {
+			
+			conn = getConnection();
+			
+			//3. SQL문 준비
+			//String sql ="select * from board, user where board.user_no = user.no order by group_no DESC, order_no ASC LIMIT ?, 5";
+			String sql ="select * from board, user where board.user_no = user.no order by group_no DESC, order_no ASC LIMIT ?, 10";
+			pstmt = conn.prepareStatement(sql);
+						
+			pstmt.setInt(1, (limit_firstNum-1)*10);
+			
 			//5. SQL실행
 			rs = pstmt.executeQuery();
 			while(rs.next()) {

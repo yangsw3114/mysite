@@ -27,7 +27,9 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>				
-					<c:set var='count' value='${fn:length(boardlist) }'/>
+					<c:set var='count' value='${fn:length(all_board) }'/>
+					<c:set var='page_count' value='${(count/10)+(1-((count/10)%1))%1 }'/> <!-- 무조건 올림 -->
+					<c:set var='pageblock' value='${5 }'/>
 					<c:forEach items='${boardlist }' var='vo' varStatus='status'>
 						<tr>
 							<td>${count-status.index }</td>
@@ -54,13 +56,29 @@
 				<!-- pager 추가 -->
 				<div class="pager">
 					<ul>
-						<li><a href="">◀</a></li>
-						<li><a href="">1</a></li>
-						<li class="selected">2</li>
-						<li><a href="">3</a></li>
-						<li>4</li>
-						<li>5</li>
-						<li><a href="">▶</a></li>
+					
+						<c:if test="${ pageno != 1  }">
+							<li><a href="${pageContext.request.contextPath }/board?pageno=${pageno-1 }">◀</a></li>
+        				</c:if>
+						
+					<c:forEach var="i" begin="${((pageno-1)/pageblock)*pageblock+1 }" end="${page_count+(pageblock-(page_count%pageblock))%pageblock }"> <!-- 5단위로 올림해줌 -->
+							<c:choose>
+								<c:when test="${i > page_count }">
+									<li>${i }</li>
+								</c:when>
+								<c:when test="${i == pageno }"> <!-- pageno = 현재 페이지 -->
+									<li class="selected">${i }</li>
+								</c:when>
+								<c:otherwise>
+									<li><a href="${pageContext.request.contextPath }/board?pageno=${i }">${i }</a></li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+
+						<c:if test="${ pageno != page_count  }">
+							<li><a href="${pageContext.request.contextPath }/board?pageno=${pageno+1 }">▶</a></li>
+        				</c:if>
+        				
 					</ul>
 				</div>					
 				<!-- pager 추가 -->
