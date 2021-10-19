@@ -18,8 +18,11 @@ desc board;
 insert into board values(null, "뭘봐요", "눈깔아", 3, now(), (select ifnull(max(group_no), 0)+1 from board b) ,0,0, 16);
 
 select * from board;
+select * from board order by group_no DESC, order_no ASC;
 SELECT * FROM board ORDER BY group_no desc, order_no asc LIMIT 0, 4;
 
 update board set order_no=order_no+1 where group_no = 1 and order_no in(select * from(select order_no from board where order_no >= 2) t);
 
 delete from board;
+
+alter table board auto_increment = 1;

@@ -123,9 +123,66 @@ public class BoardDao {
 		return result;
 	}
 	
+	public boolean modify_update(BoardVo vo) {
+		Connection conn = null;
+		boolean result =false;
+		PreparedStatement pstmt = null;
+		try {
+			
+			conn = getConnection();
+			//3. SQL문 준비
+				
+			//vo의 그룹넘버와 오더넘버를 가져와서 그것보다 같거나큰오버넘버들 전부다 +1
+			//String sql ="update board set order_no=order_no+1 where group_no = ? and order_no in(select * from(select order_no from board where order_no >= ?) t)";
+			String sql =  "update board set title = ?, contents=? where no = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			//4. 바인딩(binding)
+			pstmt.setString(1, vo.getTitle());
+			pstmt.setString(2, vo.getContents());
+			pstmt.setLong(3, vo.getNo());
+
+
+			
+			//5. SQL실행
+			int count = pstmt.executeUpdate();
+			
+			result = count == 1;
+
+		}catch(SQLException e) {
+			System.out.println("error_update:" + e);
+		}
+		finally {
+			//clean up
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+
+				if(conn != null) {
+				conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 	
 	
 	public List<BoardVo> findAll() {
+		//int first_limit_num
+//		설렉트로 전체 갯수
+//		구하고  limit ? ?  
+		//선택한 페이지 중간에 안가도 되고 선택한 페이지 빨간색으로 표시, 없는 페이지 회색
+		//1~5페이지 표시하고 5페이지에서 화살표 선택시 6~10페이지 출력
+		//한 페이지에는 10개의 게시물 출력
+//
+//		첫번째  second * 페이지넘버
+//		두번째 보여주고싶은 페이지 수
+		
+		//listAction에서 클릭한 페이지 수만큼 나누는 방식
+		//list.jsp 페이징 출력하는ㄴ 부분은 <c:forEach>, <c:choose> 같은 거 사용하면 가능
 		
 		List<BoardVo> result = new ArrayList<BoardVo>();
 		
@@ -139,7 +196,8 @@ public class BoardDao {
 			conn = getConnection();
 			
 			//3. SQL문 준비
-			String sql ="select * from board;";
+			//String sql ="select * from board, user where board.user_no = user.no order by group_no DESC, order_no ASC LIMIT ?, 5";
+			String sql ="select * from board, user where board.user_no = user.no order by group_no DESC, order_no ASC ";
 			pstmt = conn.prepareStatement(sql);
 						
 			//5. SQL실행
