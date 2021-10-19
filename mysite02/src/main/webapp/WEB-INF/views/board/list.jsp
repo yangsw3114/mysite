@@ -61,7 +61,7 @@
 							<li><a href="${pageContext.request.contextPath }/board?pageno=${pageno-1 }">◀</a></li>
         				</c:if>
 						
-					<c:forEach var="i" begin="${((pageno-1)/pageblock)*pageblock+1 }" end="${page_count+(pageblock-(page_count%pageblock))%pageblock }"> <!-- 5단위로 올림해줌 -->
+					<c:forEach var="i" begin="${((pageno-1)/pageblock)*pageblock+1 }" end="${((pageno-1)/pageblock)*pageblock+5 }"> <!-- 5단위로 올림해줌 -->
 							<c:choose>
 								<c:when test="${i > page_count }">
 									<li>${i }</li>

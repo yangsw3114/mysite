@@ -13,15 +13,22 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
-	public void HandlerException(HttpServletRequest request, HttpServletResponse response, Exception e) {
-		//1.로깅
+	public void HandlerException(
+		HttpServletRequest request,
+		HttpServletResponse response,
+		Exception e) throws Exception {
+		
+		// 1. 로깅
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
-		//LOGGER.error(errors.toString())
+		//LOGGER.error(errors.toString());
 		
-		//2. 요청 구분
+		// 2. 요청 구분
 		
-		//3. 사과 페이지(정상종료)
-		request.getRequestDispatcher("/WEB-INF/views/error/exception.jsp");
+		// 3. 사과페이지(정상종료)
+		request.setAttribute("exception", errors.toString());
+		request
+			.getRequestDispatcher("/WEB-INF/views/error/exception.jsp")
+			.forward(request, response);
 	}
 }
