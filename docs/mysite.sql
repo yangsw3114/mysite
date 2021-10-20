@@ -23,6 +23,6 @@ SELECT * FROM board ORDER BY group_no desc, order_no asc LIMIT 3, 4;
 
 update board set order_no=order_no+1 where group_no = 1 and order_no in(select * from(select order_no from board where order_no >= 2) t);
 
-delete from board;
+delete from board where no=64;
 
 alter table board auto_increment = 1;

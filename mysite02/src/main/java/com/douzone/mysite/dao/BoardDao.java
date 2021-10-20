@@ -24,7 +24,7 @@ public class BoardDao {
 			
 			//3. SQL문 준비
 			if(vo.getGroup_no() != 0) { 
-				String sql ="insert into board values(null, ?, ?, 5, now(), ?, ?, ?, ?)";
+				String sql ="insert into board values(null, ?, ?, 0, now(), ?, ?, ?, ?)";
 				
 				pstmt = conn.prepareStatement(sql);
 				
@@ -39,7 +39,7 @@ public class BoardDao {
 				 
 				}
 			else {
-				String sql ="insert into board values(null, ?, ?, 5, now(), (select ifnull(max(group_no), 0)+1 from board b), ?, ?, ?)";
+				String sql ="insert into board values(null, ?, ?, 0, now(), (select ifnull(max(group_no), 0)+1 from board b), ?, ?, ?)";
 				
 				pstmt = conn.prepareStatement(sql);
 				
@@ -141,6 +141,51 @@ public class BoardDao {
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContents());
 			pstmt.setLong(3, vo.getNo());
+
+
+			
+			//5. SQL실행
+			int count = pstmt.executeUpdate();
+			
+			result = count == 1;
+
+		}catch(SQLException e) {
+			System.out.println("error_update:" + e);
+		}
+		finally {
+			//clean up
+			try {
+				if(pstmt != null) {
+					pstmt.close();
+				}
+
+				if(conn != null) {
+				conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public boolean hit_update(BoardVo vo) {
+		Connection conn = null;
+		boolean result =false;
+		PreparedStatement pstmt = null;
+		try {
+			
+			conn = getConnection();
+			//3. SQL문 준비
+				
+			//vo의 그룹넘버와 오더넘버를 가져와서 그것보다 같거나큰오버넘버들 전부다 +1
+			//String sql ="update board set order_no=order_no+1 where group_no = ? and order_no in(select * from(select order_no from board where order_no >= ?) t)";
+			String sql =  "update board set hit = ? where no = ? ";
+			pstmt = conn.prepareStatement(sql);
+			
+			//4. 바인딩(binding)
+			pstmt.setInt(1, vo.getHit()+1);
+			pstmt.setLong(2, vo.getNo());
 
 
 			
@@ -312,7 +357,7 @@ public class BoardDao {
 		
 	}
 
-
+	
 	public BoardVo findByNo(Long no) {
 		
 		BoardVo vo = null;
@@ -399,7 +444,7 @@ public class BoardDao {
 			conn=getConnection();
 			
 			//3. SQL 준비
-			String sql = "";
+			String sql = "delete from board where no=?";
 			pstmt = conn.prepareStatement(sql);
 			
 			//4. binding

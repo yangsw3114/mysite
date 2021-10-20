@@ -14,8 +14,8 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
-					<input type="text" id="kwd" name="kwd" value="test">
+				<form id="search_form" action="${pageContext.request.contextPath }/board?a=search" method="post">
+					<input type="text" id="kwd" name="kwd" value="%kwd%">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -34,8 +34,7 @@
 					<c:set var='endNum' value='${(((pageno-1)/pageblock)-(((pageno-1)/pageblock)%1))*pageblock+pageblock }'/>
 					<c:forEach items='${boardlist }' var='vo' varStatus='status'>
 						<tr>
-							<td>${count-status.index }</td>
-
+							<td>${vo.no }</td>
 							<td style="text-align:left; padding-left:${20*vo.depth }px">
 							<c:if test="${vo.depth != 0 }">
 								<img src='${pageContext.servletContext.contextPath }/assets/images/reply.png' />
@@ -50,7 +49,9 @@
 														
 							<td>${vo.hit }</td> <!-- 클릭에 동적으로 조회수 증가하게 수정 -->
 							<td>${vo.regdate }</td>
-							<td><a href="" class="del">삭제</a></td>
+							<c:if test="${vo.user_no == authUser.no }">
+								<td><a href="${pageContext.request.contextPath }/board?a=delete&no=${vo.no }" class="del"><img src='${pageContext.servletContext.contextPath }/assets/images/recycle.png' /></a></td>
+							</c:if>
 						</tr>
 					</c:forEach>
 				</table>
