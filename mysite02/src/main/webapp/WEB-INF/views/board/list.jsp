@@ -30,6 +30,8 @@
 					<c:set var='count' value='${fn:length(all_board) }'/>
 					<c:set var='page_count' value='${(count/10)+(1-((count/10)%1))%1 }'/> <!-- 무조건 올림 -->
 					<c:set var='pageblock' value='${5 }'/>
+					<c:set var='startNum' value='${(((pageno-1)/pageblock)-(((pageno-1)/pageblock)%1))*pageblock+1 }'/>
+					<c:set var='endNum' value='${(((pageno-1)/pageblock)-(((pageno-1)/pageblock)%1))*pageblock+pageblock }'/>
 					<c:forEach items='${boardlist }' var='vo' varStatus='status'>
 						<tr>
 							<td>${count-status.index }</td>
@@ -61,7 +63,7 @@
 							<li><a href="${pageContext.request.contextPath }/board?pageno=${pageno-1 }">◀</a></li>
         				</c:if>
 						
-					<c:forEach var="i" begin="${((pageno-1)/pageblock)*pageblock+1 }" end="${((pageno-1)/pageblock)*pageblock+5 }"> <!-- 5단위로 올림해줌 -->
+						<c:forEach var="i" begin="${startNum }" end="${endNum }"> 
 							<c:choose>
 								<c:when test="${i > page_count }">
 									<li>${i }</li>
