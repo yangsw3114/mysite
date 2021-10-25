@@ -4,12 +4,12 @@ public class BoardVo {
 	private Long no;
 	private String title;
 	private String contents;
-	private Integer  hit;
-	private String regdate;
-	private Integer  GroupNo;
-	private Integer  OrderNo;
-	private Integer  depth;
-	private Long UserNo;
+	private String regDate;
+	private Integer hit;
+	private Integer groupNo;
+	private Integer orderNo;
+	private Integer depth;
+	private Long userNo;
 	private String userName;
 	
 	public Long getNo() {
@@ -30,19 +30,11 @@ public class BoardVo {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
-
-	public String getRegdate() {
-		return regdate;
+	public String getRegDate() {
+		return regDate;
 	}
-	public void setRegdate(String regdate) {
-		this.regdate = regdate;
-	}
-
-	public Long getUserNo() {
-		return UserNo;
-	}
-	public void setUserNo(Long userNo) {
-		UserNo = userNo;
+	public void setRegDate(String regDate) {
+		this.regDate = regDate;
 	}
 	public Integer getHit() {
 		return hit;
@@ -51,22 +43,28 @@ public class BoardVo {
 		this.hit = hit;
 	}
 	public Integer getGroupNo() {
-		return GroupNo;
+		return groupNo;
 	}
 	public void setGroupNo(Integer groupNo) {
-		GroupNo = groupNo;
+		this.groupNo = groupNo;
 	}
 	public Integer getOrderNo() {
-		return OrderNo;
+		return orderNo;
 	}
 	public void setOrderNo(Integer orderNo) {
-		OrderNo = orderNo;
+		this.orderNo = orderNo;
 	}
 	public Integer getDepth() {
 		return depth;
 	}
 	public void setDepth(Integer depth) {
 		this.depth = depth;
+	}
+	public Long getUserNo() {
+		return userNo;
+	}
+	public void setUserNo(Long userNo) {
+		this.userNo = userNo;
 	}
 	public String getUserName() {
 		return userName;
@@ -76,13 +74,8 @@ public class BoardVo {
 	}
 	@Override
 	public String toString() {
-		return "BoardVo [no=" + no + ", title=" + title + ", contents=" + contents + ", hit=" + hit + ", regdate="
-				+ regdate + ", GroupNo=" + GroupNo + ", OrderNo=" + OrderNo + ", depth=" + depth + ", UserNo=" + UserNo
+		return "BoardVo [no=" + no + ", title=" + title + ", contents=" + contents + ", regDate=" + regDate + ", hit="
+				+ hit + ", groupNo=" + groupNo + ", orderNo=" + orderNo + ", depth=" + depth + ", userNo=" + userNo
 				+ ", userName=" + userName + "]";
 	}
-	
-
-	
-	
-	
 }

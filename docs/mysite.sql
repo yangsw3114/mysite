@@ -36,3 +36,8 @@ desc site;
 insert into site values(null, 'Mysite', '안녕하세요. YANG SEUNG WOO의 mysite에 오신 것을 환영합니다.', '/gallery/images/zoro.jpg', '이 사이트는 웹 프로그램밍 실습과제 예제 사이트입니다.');
 
 select * from site;
+
+-- schema gallery
+desc gallery;
+
+select * from gallery;
