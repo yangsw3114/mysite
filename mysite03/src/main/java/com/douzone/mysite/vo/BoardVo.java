@@ -4,13 +4,13 @@ public class BoardVo {
 	private Long no;
 	private String title;
 	private String contents;
-	private int hit;
+	private Integer  hit;
 	private String regdate;
-	private int group_no;
-	private int order_no;
-	private int depth;
-	private Long user_no;
-	
+	private Integer  GroupNo;
+	private Integer  OrderNo;
+	private Integer  depth;
+	private Long UserNo;
+	private String userName;
 	
 	public Long getNo() {
 		return no;
@@ -30,51 +30,58 @@ public class BoardVo {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
-	public int getHit() {
-		return hit;
-	}
-	public void setHit(int hit) {
-		this.hit = hit;
-	}
+
 	public String getRegdate() {
 		return regdate;
 	}
 	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
-	public int getGroup_no() {
-		return group_no;
+
+	public Long getUserNo() {
+		return UserNo;
 	}
-	public void setGroup_no(int group_no) {
-		this.group_no = group_no;
+	public void setUserNo(Long userNo) {
+		UserNo = userNo;
 	}
-	public int getOrder_no() {
-		return order_no;
+	public Integer getHit() {
+		return hit;
 	}
-	public void setOrder_no(int order_no) {
-		this.order_no = order_no;
+	public void setHit(Integer hit) {
+		this.hit = hit;
 	}
-	public int getDepth() {
+	public Integer getGroupNo() {
+		return GroupNo;
+	}
+	public void setGroupNo(Integer groupNo) {
+		GroupNo = groupNo;
+	}
+	public Integer getOrderNo() {
+		return OrderNo;
+	}
+	public void setOrderNo(Integer orderNo) {
+		OrderNo = orderNo;
+	}
+	public Integer getDepth() {
 		return depth;
 	}
-	public void setDepth(int depth) {
+	public void setDepth(Integer depth) {
 		this.depth = depth;
 	}
-
-	
-	public Long getUser_no() {
-		return user_no;
+	public String getUserName() {
+		return userName;
 	}
-	public void setUser_no(Long user_no) {
-		this.user_no = user_no;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	@Override
 	public String toString() {
 		return "BoardVo [no=" + no + ", title=" + title + ", contents=" + contents + ", hit=" + hit + ", regdate="
-				+ regdate + ", group_no=" + group_no + ", order_no=" + order_no + ", depth=" + depth + ", user_no="
-				+ user_no + "]";
+				+ regdate + ", GroupNo=" + GroupNo + ", OrderNo=" + OrderNo + ", depth=" + depth + ", UserNo=" + UserNo
+				+ ", userName=" + userName + "]";
 	}
 	
+
 	
 	
 	
