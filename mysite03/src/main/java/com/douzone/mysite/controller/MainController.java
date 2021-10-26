@@ -3,21 +3,30 @@ package com.douzone.mysite.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MainController {
+	@Autowired
+	ServletContext servletContext;
+	
 	
 	//@Auth
 	@RequestMapping({"","/main"})
 	public String index() {
+//		SiteVo site = servletContext.getAttribute("site");
+//		if(site == null) {
+//			SiteVo vo = siteService.getSite();
+//			servletContext.setAttribute("site", vo);
+//		}
 		return "main/index";
-		//"/WEB-INF/views/main/index.jsp" -> "main/index"
-		//view resolver 설정으로 "main/index"만 작성가능
+
 	}
 	
 	//StringHttpMessageConverter
