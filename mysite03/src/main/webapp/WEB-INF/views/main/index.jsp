@@ -11,22 +11,22 @@
 </head>
 <body>
 	<div id="container">
-	<c:import url="/WEB-INF/views/includes/header.jsp"/>
+		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="wrapper">
 			<div id="content">
 				<div id="site-introduction">
-					<img id="profile" src="${pageContext.request.contextPath }/assets/images/zoro.jpg">
-					<h2>안녕하세요. YANG SEUNG WOO의  mysite에 오신 것을 환영합니다.</h2>
+					<img id="profile" src="${pageContext.request.contextPath }${site.profile }">
+					<h2>${site.welcome }</h2>
 					<p>
-						이 사이트는  웹 프로그램밍 실습과제 예제 사이트입니다.<br><br>
-						<a href="${pageContext.request.contextPath }/guest?a=list">방명록</a>에 글 남기기<br>
+						${site.description }
+						<br><br>
+						<a href="${pageContext.request.contextPath }/guestbook">방명록</a>에 글 남기기<br>
 					</p>
 				</div>
 			</div>
 		</div>
-		<c:import url="/WEB-INF/views/includes/navigation.jsp"/>
-		<c:import url="/WEB-INF/views/includes/footer.jsp"/>
-		
+		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
+		<c:import url="/WEB-INF/views/includes/footer.jsp" />
 	</div>
 </body>
 </html>
