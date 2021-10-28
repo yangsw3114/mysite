@@ -64,7 +64,8 @@
 								class="image"
 								style="background-image:url('${pageContext.request.contextPath }${vo.url }">&nbsp;</a>
 							<c:if test='${not empty authUser && authUser.role == "ADMIN" }'>	
-								<a	href="${pageContext.request.contextPath }/gallery/delete/${vo.no }"
+								<a	style="background: url('${pageContext.request.contextPath }/assets/images/delete-image.png') no-repeat 0 0 / 18px"
+									href="${pageContext.request.contextPath }/gallery/delete/${vo.no }"
 									class="del-button"
 									title="삭제">삭제</a>
 							</c:if>		

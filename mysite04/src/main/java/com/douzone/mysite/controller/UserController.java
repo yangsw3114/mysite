@@ -95,7 +95,7 @@ public class UserController {
 
 	@RequestMapping(value="/update", method=RequestMethod.POST)
 	public String update(HttpSession session, UserVo userVo) {
-		// 접근제어(Access Control List)
+		// /////////////접근제어(Access Control List)
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		if(authUser == null) {
 			return "redirect:/";
@@ -109,5 +109,14 @@ public class UserController {
 		
 		return "redirect:/user/update";
 	}	
+	
+	@RequestMapping(value="/auth", method=RequestMethod.POST)
+	public void auth() {
+		
+	}
+	@RequestMapping(value="/logout", method=RequestMethod.GET)
+	public void logout() {
+		
+	}
 	
 }
