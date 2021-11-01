@@ -1,0 +1,21 @@
+com.douzone.container.videosystem
+ |--- DVDPlayer			 (java, src/main/java)
+ |--- DigitalVideoDisc		 (java, src/main/java)
+ |--- ...				 (java, src/main/java)
+
+com.douzone.container.config.videosystem
+ |--- DVDPlayerConfig.xml 	 	(xml, src/main/resources)
+ |--- DVDPlayerConfig.java 	 	(java, src/main/java)
+
+com.douzone.container.config.videosystem
+ |--- DVDPlayerXmlConfigTest	(java, src/test/java)
+ |--- DVDPlayerJavaConfigTest  	(java, src/test/java)
+
+com.douzone.container.config.videosystem.mixing
+ |--- DVDConfig	 		(java, src/main/java)
+ |--- DVDPlayerConfig	 	(java, src/main/java)
+ |--- VideoSystemConfig	 	(java, src/main/java)
+
+com.douzone.container.config.videosystem.mixing
+ |--- DVDPlayerMixingConfig01Test	(java, src/test/java)
+ |--- DVDPlayerMixingConfig02Test  	(java, src/test/java)
