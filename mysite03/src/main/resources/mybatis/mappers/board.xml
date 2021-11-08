@@ -10,8 +10,8 @@
 				values ( null,
 						 #{title },
 						 #{contents },
-						 now(),
 						 0,
+						 now(),					 
 						 ( select ifnull( max( group_no ), 0 ) + 1
 						     from board a ),
 						 1, 
