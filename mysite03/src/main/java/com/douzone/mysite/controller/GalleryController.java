@@ -33,6 +33,8 @@ public class GalleryController {
 		return "gallery/index";
 	}
 	
+
+	
 	@Auth(role="ADMIN")
 	@RequestMapping(value="/upload", method=RequestMethod.POST)
 	public String upload(@RequestParam("file") MultipartFile file, @RequestParam(value="comments", required=true, defaultValue="") String comments) {

@@ -6,6 +6,7 @@ public class JsonResult {
 	private String message; /* if fail, set */
 	
 	private JsonResult() {}
+	
 	private JsonResult(Object data) {
 		result = "success";
 		this.data = data;
