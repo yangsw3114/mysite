@@ -41,3 +41,5 @@ select * from site;
 desc gallery;
 
 select * from gallery;
+
+select * from guestbook;

@@ -6,10 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.douzone.mysite.dto.JsonResult;
 import com.douzone.mysite.service.GuestbookService;
 import com.douzone.mysite.vo.GuestbookVo;
 
@@ -27,9 +30,18 @@ public class GuestbookController {
 	}
 	
 	@RequestMapping("/spa")
-	public String spa() {
-
+	public String spa(Model model) {
+		List<GuestbookVo> list = guestbookService.getMessageList();
+		model.addAttribute("list", list);
 		return "guestbook/index-spa";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/spa/add")
+	public String spa_insert(@RequestBody GuestbookVo vo) {
+//		vo = guestbookService.addMessage(vo);
+//		return JsonResult.success(vo);
+		return "guestbook/index-spa"; //임시방편
 	}
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
